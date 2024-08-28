@@ -1,7 +1,6 @@
 import { a } from "@aws-amplify/backend";
 
 export const RaffleModel = a.model({
-    id: a.id(),
     description: a.string(), // mô tả Raffle
     startTime: a.datetime(), // thời gian bắt đầu bán vé
     endTime: a.datetime(), // thời gian kết thúc sau khi quay thưởng hoặc hủy raffle
