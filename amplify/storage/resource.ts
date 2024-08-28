@@ -9,7 +9,7 @@ export const storage = defineStorage({
             ],
             'picture-product/*': [ // hình ảnh sản phầm
                 allow.guest.to(['read']),
-                allow.groups(['Admin', 'SecAdmin']).to(['read', 'write', 'delete'])
+                allow.groups(['Admin', 'StoreOwner']).to(['read', 'write', 'delete'])
             ],
         })
 });
