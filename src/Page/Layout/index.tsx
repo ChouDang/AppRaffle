@@ -3,7 +3,6 @@ import useRouterHook from '../../Hooks/useRouterHook';
 import { Button, Dropdown, Layout as LayoutAntd, Menu, theme } from 'antd';
 import { AuthUser } from 'aws-amplify/auth';
 import Avatar from '../../Component/Avatar';
-import Breadcrumb from '../../Component/Breadcrumb';
 import { RouterProvider } from 'react-router-dom';
 const { Header, Content, Footer } = LayoutAntd;
 
@@ -83,9 +82,9 @@ const Layout = ({
 
                 </Header>
                 <Content style={{ padding: '0 48px' }}>
-                    <Breadcrumb customRouter={customRouter || []} />
                     <div
                         style={{
+                            marginTop: 56,
                             background: colorBgContainer,
                             minHeight: 'calc(100vh - 190px)',
                             padding: 24,

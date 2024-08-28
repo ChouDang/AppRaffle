@@ -7,7 +7,7 @@ export const storage = defineStorage({
                 allow.guest.to(['read']),
                 allow.entity('identity').to(['read', 'write', 'delete'])
             ],
-            'picture-product/*': [ // hình ảnh sản phầm
+            'picture-product/{entity_id}/*': [ // hình ảnh sản phầm
                 allow.guest.to(['read']),
                 allow.groups(['Admin', 'StoreOwner']).to(['read', 'write', 'delete'])
             ],

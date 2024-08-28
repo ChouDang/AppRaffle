@@ -4,6 +4,7 @@ import { RouteObject, createBrowserRouter } from 'react-router-dom';
 import { fetchAuthSession } from 'aws-amplify/auth';
 import Error from '../Page/Error';
 import Home from '../Page/Home';
+import UserInfo from '../Page/UserInfo';
 
 type PropsCustom = {
     signOut: ((data?: any) => void) | undefined,
@@ -58,6 +59,15 @@ const useRouterHook = (props: PropsCustom) => {
             element: <Home />,
             errorElement: <Error />,
             isShowMenu: true,
+        },
+        {
+            path: "/UserInfo",
+            Id: 'UserInfo',
+            PageName: "Thông tin cá nhân",
+            permission: { View: true, Edit: true },
+            element: <UserInfo />,
+            errorElement: <Error />,
+            isShowMenu: false,
         },
         {
             path: "/logout",
