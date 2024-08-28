@@ -4,9 +4,9 @@ export const ResultModel = a.model({
     id: a.id(),
     dateTimeWinner: a.datetime(), 
 
-    raffleID: a.id(),
-    raffle: a.belongsTo('Raffle', 'raffleID'),
+    raffleId: a.id(),
+    raffle: a.belongsTo('Raffle', 'raffleId'),
 
-    winnerID: a.id(),
-    winner: a.belongsTo('User', 'winnerID'),
+    winnerId: a.id(),
+    winner: a.belongsTo('User', 'winnerId'),
 })
