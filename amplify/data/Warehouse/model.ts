@@ -5,5 +5,5 @@ export const WarehouseModel = a.model({
     status: a.enum(['stockLeft', 'outStock', 'block']), // trạng thái
 
     productId: a.id(),
-    product: a.belongsTo("Product", "productId")
+    product: a.belongsTo('Product', 'productId')
 })

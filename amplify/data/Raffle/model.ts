@@ -12,5 +12,5 @@ export const RaffleModel = a.model({
     results: a.hasOne('Result', 'raffleId'), // 1: 1 kết quả raffle
 
     productId: a.id(), // id sản phần trúng
-    rewardProduct: a.belongsTo('Product', "productId"), // chi tiết phần thưởng
+    rewardProduct: a.belongsTo('Product', 'productId'), // chi tiết phần thưởng
 })
