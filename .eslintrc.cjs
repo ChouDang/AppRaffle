@@ -9,6 +9,10 @@ module.exports = {
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh'],
+  rules: {
+    "react/react-in-jsx-scope": "off",
+    "no-unused-vars": ["error", { "varsIgnorePattern": "React" }]
+  }
   // rules: {
   //   'react-refresh/only-export-components': [
   //     'warn',
