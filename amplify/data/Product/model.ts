@@ -5,6 +5,5 @@ export const ProductModel = a.model({
     name: a.string(), // tên
     price: a.integer(), // giá
 
-    raffleId: a.id(),
-    raffle: a.belongsTo('Raffle', 'raffleId'),  // lấy dữ liệu bảng Raffle thuộc về raffleId 
+    raffle: a.hasOne('Raffle', 'productId'), // 1 : 1 với Raffle
 })
