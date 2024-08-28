@@ -1,6 +1,7 @@
 import { a } from "@aws-amplify/backend";
 
 export const ResultModel = a.model({
+    id: a.id(),
     dateTimeWinner: a.datetime(), 
 
     raffleID: a.id(),

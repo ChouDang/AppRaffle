@@ -1,6 +1,7 @@
 import { a } from "@aws-amplify/backend";
 
 export const ParticipationModel = a.model({
+    id: a.id(),
     ticketsPurchased: a.integer(), // số lượng vé mua 
     participationTime: a.datetime(), // thời gian mua 
 
