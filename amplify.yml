@@ -3,7 +3,8 @@ backend:
   phases:
     build:
       commands:
-        - npm install --cache .npm
+        - npm install --cache .npm --prefer-offline
+        - npm ci aws-sdk @aws-sdk/client-cognito-identity-provider @types/aws-lambda
         - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
 frontend:
   phases:
