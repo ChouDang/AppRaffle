@@ -15,15 +15,14 @@ export const handler: APIGatewayProxyHandler = async (event) => {
         };
     }
 
-    const params = {
-        GroupName: groupName,
-        UserPoolId: userPoolId,
-        Username: username,
-    };
-    console.log(params, "params")
     try {
         // await cognito.adminAddUserToGroup(params).promise();
-
+        const params = {
+            GroupName: groupName,
+            UserPoolId: userPoolId,
+            Username: username,
+        };
+        console.log(params, "params")
         return {
             statusCode: 200,
             body: JSON.stringify({ message: 'User added to group successfully!' }),
