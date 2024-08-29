@@ -77,6 +77,7 @@ I18n.putVocabularies({
             'Mã của bạn đang trên đường đến. Để đăng nhập, nhập mã chúng tôi đã gửi cho bạn',
         'Your code is on the way. To log in, enter the code we texted to':
             'Mã của bạn đang trên đường đến. Để đăng nhập, nhập mã chúng tôi đã gửi qua tin nhắn đến',
+        "Your passwords must match": "Mật khẩu không giống"
     }
 });
 I18n.setLanguage('vi');
@@ -138,6 +139,7 @@ export const component = {
                 </View>
             );
         },
+
     },
 
     SignUp: {
@@ -177,7 +179,7 @@ export const component = {
             return (
                 <>
                     <Authenticator.SignUp.FormFields />
-                    <SelectField label="Bạn là:">
+                    <SelectField name="locale" label="Bạn là:">
                         <option value="User">Người dùng</option>
                         <option value="StoreOwner">Đại lý</option>
                     </SelectField>
@@ -313,6 +315,15 @@ export const formFields = {
             dialCodeList: ['+84'],
             dialCode: '+84'
         },
+        // group: {
+        //     isRequired: true,
+        //     label: 'Số điện thoại:',
+        //     placeholder: 'Nhập số điện thoại',
+        //     order: 5,
+        //     dialCodeList: ['+84'],
+        //     dialCode: '+84',
+        //     type: 'autocomplete'
+        // }
     },
     forgotPassword: {
         username: {
