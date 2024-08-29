@@ -1,5 +1,4 @@
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
-import { TodoSchema } from "./Todo";
 import { RaffleSchema } from "./Raffle";
 import { ResultSchema } from "./Result";
 import { ParticipationSchema } from "./Participation";
@@ -7,7 +6,6 @@ import { ProductSchema } from "./Product";
 import { WarehouseSchema } from "./Warehouse";
 
 const schema = a.schema({
-  ...TodoSchema, // mẫu
   ...RaffleSchema, // thông tin Raffle
   ...ParticipationSchema, // thông tin tham gia
   ...ResultSchema, // kết quả

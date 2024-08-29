@@ -14,10 +14,16 @@ export const handler: APIGatewayProxyHandler = async (event) => {
             body: JSON.stringify({ message: 'Missing required parameters' }),
         };
     }
-
+    console.log(userPoolId, "userPoolId")
+    console.log(username, "username")
+    console.log(groupName, "groupName")
     try {
         // await cognito.adminAddUserToGroup(params).promise();
-        const params = {
+        const params: {
+            GroupName: string,
+            UserPoolId: string,
+            Username: string,
+        } = {
             GroupName: groupName,
             UserPoolId: userPoolId,
             Username: username,
