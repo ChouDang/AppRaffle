@@ -12,14 +12,14 @@ import { myApiFunction } from "./functions/api-function/resource";
 import { auth } from "./auth/resource";
 import { data } from "./data/resource";
 import { storage } from './storage/resource';
-import { ApiFunctionAddUserToGroupFunction } from "./functions/AddUserToGroupFunction/resource";
+import { postConfirmation } from "./functions/AddUserToGroupFunction/resource";
 
 const backend = defineBackend({
   auth,
   data,
   storage,
   myApiFunction,
-  ApiFunctionAddUserToGroupFunction
+  postConfirmation
 });
 // create a new API stack
 const apiStack = backend.createStack("api-stack");
@@ -44,7 +44,7 @@ const cognitoAuth = new CognitoUserPoolsAuthorizer(apiStack, "CognitoAuth", {
 });
 
 const lambdaIntegrationAddUserToGroupFunction = new LambdaIntegration(
-  backend.ApiFunctionAddUserToGroupFunction.resources.lambda
+  backend.postConfirmation.resources.lambda
 );
 
 // create a new resource path with IAM authorization & add methods you would like to create to the resource path
