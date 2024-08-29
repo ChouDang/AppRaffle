@@ -9,17 +9,19 @@ import {
 } from "aws-cdk-lib/aws-apigateway";
 import { Policy, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { myApiFunction } from "./functions/api-function/resource";
+
 import { auth } from "./auth/resource";
 import { data } from "./data/resource";
 import { storage } from './storage/resource';
+import { ApiFunctionAddUserToGroupFunction } from "./functions/AddUserToGroupFunction/resource";
 
 const backend = defineBackend({
   auth,
   data,
   storage,
   myApiFunction,
+  ApiFunctionAddUserToGroupFunction
 });
-
 // create a new API stack
 const apiStack = backend.createStack("api-stack");
 
@@ -37,34 +39,53 @@ const myRestApi = new RestApi(apiStack, "RestApi", {
   },
 });
 
-// create a new Lambda integration
+// create a new Cognito User Pools authorizer
+const cognitoAuth = new CognitoUserPoolsAuthorizer(apiStack, "CognitoAuth", {
+  cognitoUserPools: [backend.auth.resources.userPool],
+});
+
+// create a new Lambda integration 
 const lambdaIntegration = new LambdaIntegration(
   backend.myApiFunction.resources.lambda
 );
+const lambdaIntegrationAddUserToGroupFunction = new LambdaIntegration(
+  backend.ApiFunctionAddUserToGroupFunction.resources.lambda
+);
 
-// create a new resource path with IAM authorization
+// create a new resource path with IAM authorization & add methods you would like to create to the resource path
 const itemsPath = myRestApi.root.addResource("items", {
   defaultMethodOptions: {
     authorizationType: AuthorizationType.IAM,
   },
 });
-
-// add methods you would like to create to the resource path
 itemsPath.addMethod("GET", lambdaIntegration);
 itemsPath.addMethod("POST", lambdaIntegration);
 itemsPath.addMethod("DELETE", lambdaIntegration);
 itemsPath.addMethod("PUT", lambdaIntegration);
+
+
+// create a new resource path with IAM authorization & add methods you would like to create to the resource path
+const addUserToGroupFunctionPath = myRestApi.root.addResource("addUserToGroupFunction", {
+  defaultMethodOptions: {
+    authorizationType: AuthorizationType.IAM,
+  },
+});
+addUserToGroupFunctionPath.addMethod("POST", lambdaIntegrationAddUserToGroupFunction, {
+  authorizationType: AuthorizationType.COGNITO,
+  authorizer: cognitoAuth,
+});
+
 
 // add a proxy resource path to the API
 itemsPath.addProxy({
   anyMethod: true,
   defaultIntegration: lambdaIntegration,
 });
-
-// create a new Cognito User Pools authorizer
-const cognitoAuth = new CognitoUserPoolsAuthorizer(apiStack, "CognitoAuth", {
-  cognitoUserPools: [backend.auth.resources.userPool],
+addUserToGroupFunctionPath.addProxy({
+  anyMethod: true,
+  defaultIntegration: lambdaIntegrationAddUserToGroupFunction,
 });
+
 
 // create a new resource path with Cognito authorization
 const booksPath = myRestApi.root.addResource("cognito-auth-path");
@@ -82,6 +103,9 @@ const apiRestPolicy = new Policy(apiStack, "RestApiPolicy", {
         `${myRestApi.arnForExecuteApi("*", "/items", "dev")}`,
         `${myRestApi.arnForExecuteApi("*", "/items/*", "dev")}`,
         `${myRestApi.arnForExecuteApi("*", "/cognito-auth-path", "dev")}`,
+
+        `${myRestApi.arnForExecuteApi("*", "/addUserToGroupFunction", "dev")}`,
+        `${myRestApi.arnForExecuteApi("*", "/addUserToGroupFunction/*", "dev")}`,
       ],
     }),
   ],
