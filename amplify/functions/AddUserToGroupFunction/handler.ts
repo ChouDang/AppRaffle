@@ -5,7 +5,7 @@ import * as AWS from 'aws-sdk';
 const cognito = new AWS.CognitoIdentityServiceProvider();
 
 export const handler: APIGatewayProxyHandler = async (event) => {
-    console.log(event, "event")
+    console.log(event, typeof event === "string", "event")
     const { userPoolId, username, groupName } = JSON.parse(event.body || '{}');
 
     if (!userPoolId || !username || !groupName) {
