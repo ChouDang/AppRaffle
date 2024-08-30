@@ -32,11 +32,11 @@ const myRestApi = new RestApi(apiStack, "RestApi", {
     stageName: "dev",
     cachingEnabled: false,
   },
-  defaultCorsPreflightOptions: {
-    allowOrigins: Cors.ALL_ORIGINS, // Restrict this to domains you trust
-    // allowMethods: Cors.ALL_METHODS, // Specify only the methods you need to allow
-    // allowHeaders: Cors.DEFAULT_HEADERS, // Specify only the headers you need to allow
-  },
+  // defaultCorsPreflightOptions: {
+  //   allowOrigins: Cors.ALL_ORIGINS, // Restrict this to domains you trust
+  //   allowMethods: Cors.ALL_METHODS, // Specify only the methods you need to allow
+  //   allowHeaders: Cors.DEFAULT_HEADERS, // Specify only the headers you need to allow
+  // },
 });
 
 // create a new Cognito User Pools authorizer
