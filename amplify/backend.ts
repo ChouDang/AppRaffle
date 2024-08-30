@@ -30,6 +30,7 @@ const myRestApi = new RestApi(apiStack, "RestApi", {
   deploy: true,
   deployOptions: {
     stageName: "dev",
+    cachingEnabled: false,
   },
   defaultCorsPreflightOptions: {
     allowOrigins: Cors.ALL_ORIGINS, // Restrict this to domains you trust

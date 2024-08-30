@@ -23,13 +23,21 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
         // const data = await cognito.listUsers(params).promise();
         return {
             statusCode: 200,
-            body: JSON.stringify({}),
+            body: "test resp",
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            },
         };
     } catch (error) {
         console.error('Error fetching users:', error);
         return {
             statusCode: 500,
             body: JSON.stringify({ message: 'Error fetching users' }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            },
         };
     }
 };

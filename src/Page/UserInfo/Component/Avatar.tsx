@@ -14,6 +14,7 @@ const Avatar = () => {
     useEffect(() => {
         fetchAuthSession().then((info) => {
             set_UserInfo(info)
+            console.log(info, "info")
         });
     }, [])
 
