@@ -100,188 +100,162 @@ I18n.putVocabularies({
 });
 I18n.setLanguage('vi');
 
-export const component = (set_loginAction = (vl: boolean) => { }) => {
-    return {
+export const component = {
+
+    Header() {
+        return (
+            <View textAlign="center">
+                <Image
+                    alt="ChouDang logo"
+                    src={process.env.NODE_ENV == "development"
+                        ? `${window.location.origin}/public/LOGOCHOUDANG.png`
+                        : `${window.location.origin}/LOGOCHOUDANG.png`}
+                    width={200} height={100}
+                />
+            </View>
+        );
+    },
+    Footer() {
+        const { tokens } = useTheme();
+        return (
+            <View textAlign="center" padding={tokens.space.large}>
+                <Text color={tokens.colors.neutral[80]}>
+                    &copy; All Rights Reserved
+                </Text>
+            </View>
+        );
+    },
+    SignIn: {
         Header() {
             return (
-                <View textAlign="center">
-                    <Image
-                        alt="ChouDang logo"
-                        src={process.env.NODE_ENV == "development"
-                            ? `${window.location.origin}/public/LOGOCHOUDANG.png`
-                            : `${window.location.origin}/LOGOCHOUDANG.png`}
-                        width={200} height={100}
-                    />
-                </View>
+                <Heading
+                    level={3}
+                    style={{ display: 'flex', justifyContent: "center" }}
+                >
+                    Đăng nhập
+                </Heading>
+            );
+        },
+    },
+    SignUp: {
+        Header() {
+            return (
+                <Heading
+                    level={3}
+                    style={{
+                        display: 'flex',
+                        justifyContent: "center"
+                    }}
+                >
+                    Tạo tài khoản
+                </Heading>
             );
         },
         Footer() {
-            const { tokens } = useTheme();
+            const { toSignIn } = useAuthenticator();
             return (
-                <View textAlign="center" padding={tokens.space.large}>
-                    <Text color={tokens.colors.neutral[80]}>
-                        &copy; All Rights Reserved
-                    </Text>
+                <View textAlign="center">
+                    <Button
+                        fontWeight="normal"
+                        onClick={toSignIn}
+                        size="small"
+                        variation="link"
+                    >
+                        Quay lại Đăng nhập
+                    </Button>
                 </View>
             );
         },
-        SignIn: {
-            Header() {
-                return (
-                    <Heading
-                        level={3}
-                        style={{ display: 'flex', justifyContent: "center" }}
-                    >
-                        Đăng nhập
-                    </Heading>
-                );
-            },
-            Footer() {
-                const { toForgotPassword } = useAuthenticator();
-                return (
-                    <View textAlign="center" style={{
-                        display: "flex",
-                        justifyContent: "space-around"
-                    }}>
-                        <Button
-                            fontWeight="normal"
-                            onClick={() => set_loginAction(false)}
-                            size="small"
-                            variation="link"
-                        >
-                            Đi đến trang khách
-                        </Button>
-                        <Button
-                            fontWeight="normal"
-                            onClick={toForgotPassword}
-                            size="small"
-                            variation="link"
-                        >
-                            Reset Mật khẩu
-                        </Button>
-                    </View>
-                );
-            },
+        FormFields() {
+            return (
+                <>
+                    <Authenticator.SignUp.FormFields />
+                    <SelectField name="locale" label="Bạn là:">
+                        <option value="User">Người dùng</option>
+                        <option value="StoreOwner">Đại lý</option>
+                    </SelectField>
+                </>
+            );
         },
-        SignUp: {
-            Header() {
-                return (
-                    <Heading
-                        level={3}
-                        style={{
-                            display: 'flex',
-                            justifyContent: "center"
-                        }}
-                    >
-                        Tạo tài khoản
-                    </Heading>
-                );
-            },
-            Footer() {
-                const { toSignIn } = useAuthenticator();
-                return (
-                    <View textAlign="center">
-                        <Button
-                            fontWeight="normal"
-                            onClick={toSignIn}
-                            size="small"
-                            variation="link"
-                        >
-                            Quay lại Đăng nhập
-                        </Button>
-                    </View>
-                );
-            },
-            FormFields() {
-                return (
-                    <>
-                        <Authenticator.SignUp.FormFields />
-                        <SelectField name="locale" label="Bạn là:">
-                            <option value="User">Người dùng</option>
-                            <option value="StoreOwner">Đại lý</option>
-                        </SelectField>
-                    </>
-                );
-            },
+    },
+    ConfirmSignUp: {
+        Header() {
+            return (
+                <Heading
+                    level={3}
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'center'
+                    }}
+                >
+                    Xác nhận đăng ký
+                </Heading>
+            );
         },
-        ConfirmSignUp: {
-            Header() {
-                return (
-                    <Heading
-                        level={3}
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'center'
-                        }}
-                    >
-                        Xác nhận đăng ký
-                    </Heading>
-                );
-            },
+    },
+    SetupTotp: {
+        Header() {
+            return (
+                <Heading
+                    level={3}
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'center'
+                    }}
+                >
+                    Nhập thông tin
+                </Heading>
+            );
         },
-        SetupTotp: {
-            Header() {
-                return (
-                    <Heading
-                        level={3}
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'center'
-                        }}
-                    >
-                        Nhập thông tin
-                    </Heading>
-                );
-            },
+    },
+    ConfirmSignIn: {
+        Header() {
+            return (
+                <Heading
+                    level={3}
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'center'
+                    }}
+                >
+                    Nhập thông tin
+                </Heading>
+            );
         },
-        ConfirmSignIn: {
-            Header() {
-                return (
-                    <Heading
-                        level={3}
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'center'
-                        }}
-                    >
-                        Nhập thông tin
-                    </Heading>
-                );
-            },
+    },
+    ForgotPassword: {
+        Header() {
+            return (
+                <Heading
+                    level={3}
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'center'
+                    }}
+                >
+                    Reset Mật khẩu
+                </Heading>
+            );
         },
-        ForgotPassword: {
-            Header() {
-                return (
-                    <Heading
-                        level={3}
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'center'
-                        }}
-                    >
-                        Reset Mật khẩu
-                    </Heading>
-                );
-            },
+    },
+    ConfirmResetPassword: {
+        Header() {
+            return (
+                <Heading
+                    level={3}
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'center'
+                    }}
+                >
+                    Xác nhận Mật khẩu
+                </Heading>
+            );
         },
-        ConfirmResetPassword: {
-            Header() {
-                return (
-                    <Heading
-                        level={3}
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'center'
-                        }}
-                    >
-                        Xác nhận Mật khẩu
-                    </Heading>
-                );
-            },
-        },
-    };
+    },
+};
 
-}
+
 export const formFields = {
     signIn: {
         username: {

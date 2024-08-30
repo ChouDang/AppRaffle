@@ -1,10 +1,9 @@
-import React, { Fragment, useEffect } from 'react'
-import useRouterHook from '../../Hooks/useRouterHook';
 import { Button, Dropdown, Layout as LayoutAntd, Menu, theme } from 'antd';
-import { AuthUser, fetchAuthSession } from 'aws-amplify/auth';
-import Avatar from '../../Component/Avatar';
+import { AuthUser } from 'aws-amplify/auth';
+import { Fragment } from 'react';
 import { RouterProvider } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import Avatar from '../../Component/Avatar';
+import useRouterHook from '../../Hooks/useRouterHook';
 const { Header, Content, Footer } = LayoutAntd;
 
 const Layout = ({
@@ -14,37 +13,27 @@ const Layout = ({
     signOut: ((data?: any) => void) | undefined,
     user: AuthUser | undefined
 }) => {
-
     const {
         router,
         menuItems,
-
-        routerAdmin,
-
         selectedKeys,
         set_selectedKeys
     } = useRouterHook({
-        signOut
+        signOut,
+        user
     })
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
-
-    const { data: UserInfo } = useQuery({
-        queryKey: ["UserInfo"],
-        queryFn: () => fetchAuthSession(),
-        enabled: !!user,
-        staleTime: 1000 * 60 * 60
-    })
-
-    if (UserInfo && UserInfo?.tokens?.accessToken?.payload?.["cognito:groups"][0] === 'Admin') {
-        return <RouterProvider router={routerAdmin} fallbackElement={<p>Initial Load...</p>} />
-    }
-
     return (
         <Fragment>
             <LayoutAntd>
-                <Header style={{ display: 'flex', alignItems: 'center', justifyContent: "space-between" }}>
+                <Header style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: "space-between",
+                    background: "#fff"
+                }}>
                     <div className="Logo" style={{
                         display: "flex",
                         justifyContent: "center",
@@ -60,14 +49,13 @@ const Layout = ({
                         } alt="logo" width={80} height={40} />
                     </div>
                     <Menu
-                        theme="dark"
                         mode="horizontal"
-                        items={menuItems}
+                        items={!!menuItems.length ? menuItems : []}
                         selectedKeys={selectedKeys}
-                        onClick={e => {
-                            set_selectedKeys(e.keyPath)
+                        onClick={e => set_selectedKeys(e.keyPath)}
+                        style={{
+                            display: "flex", justifyContent: 'center', flex: 1,
                         }}
-                        style={{ display: "flex", justifyContent: 'center', flex: 1 }}
                     />
                     <Dropdown
                         menu={{
@@ -95,7 +83,6 @@ const Layout = ({
                             borderRadius: "50%",
                         }} />
                     </Dropdown>
-
                 </Header>
                 <Content style={{ padding: '0 48px' }}>
                     <div
@@ -107,7 +94,7 @@ const Layout = ({
                             borderRadius: borderRadiusLG,
                         }}
                     >
-                        <RouterProvider router={router} fallbackElement={<p>Initial Load...</p>} />
+                        {!!menuItems.length && <RouterProvider router={router} fallbackElement={<p>Initial Load...</p>} />}
                     </div>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>

@@ -8,18 +8,18 @@ import {
   RestApi,
 } from "aws-cdk-lib/aws-apigateway";
 import { Policy, PolicyStatement } from "aws-cdk-lib/aws-iam";
-import { myApiFunction } from "./functions/api-function/resource";
 import { auth } from "./auth/resource";
 import { data } from "./data/resource";
 import { storage } from './storage/resource';
 import { postConfirmation } from "./functions/AddUserToGroupFunction/resource";
+import { getUserPool } from "./functions/GetUserPool/resource";
 
 const backend = defineBackend({
   auth,
   data,
   storage,
-  myApiFunction,
-  postConfirmation
+  postConfirmation,
+  getUserPool,
 });
 // create a new API stack
 const apiStack = backend.createStack("api-stack");
@@ -47,6 +47,11 @@ const lambdaIntegrationAddUserToGroupFunction = new LambdaIntegration(
   backend.postConfirmation.resources.lambda
 );
 
+const lambdaIntegrationGetUserPool = new LambdaIntegration(
+  backend.getUserPool.resources.lambda
+);
+
+
 // create a new resource path with IAM authorization & add methods you would like to create to the resource path
 const addUserToGroupFunctionPath = myRestApi.root.addResource("addUserToGroupFunction", {
   defaultMethodOptions: {
@@ -58,6 +63,16 @@ addUserToGroupFunctionPath.addMethod("POST", lambdaIntegrationAddUserToGroupFunc
   authorizer: cognitoAuth,
 });
 
+const getUserPoolPath = myRestApi.root.addResource("getUserPoolFunction", {
+  defaultMethodOptions: {
+    authorizationType: AuthorizationType.IAM,
+  },
+});
+getUserPoolPath.addMethod("GET", lambdaIntegrationGetUserPool, {
+  authorizationType: AuthorizationType.COGNITO,
+  authorizer: cognitoAuth,
+});
+
 // create a new IAM policy to allow Invoke access to the API
 const apiRestPolicy = new Policy(apiStack, "RestApiPolicy", {
   statements: [
@@ -65,7 +80,7 @@ const apiRestPolicy = new Policy(apiStack, "RestApiPolicy", {
       actions: ["execute-api:Invoke"],
       resources: [
         `${myRestApi.arnForExecuteApi("*", "/addUserToGroupFunction", "dev")}`,
-        `${myRestApi.arnForExecuteApi("*", "/addUserToGroupFunction/*", "dev")}`,
+        `${myRestApi.arnForExecuteApi("*", "/getUserPoolFunction", "dev")}`,
       ],
     }),
   ],
