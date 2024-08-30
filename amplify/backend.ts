@@ -34,8 +34,8 @@ const myRestApi = new RestApi(apiStack, "RestApi", {
   },
   defaultCorsPreflightOptions: {
     allowOrigins: Cors.ALL_ORIGINS, // Restrict this to domains you trust
-    allowMethods: Cors.ALL_METHODS, // Specify only the methods you need to allow
-    allowHeaders: Cors.DEFAULT_HEADERS, // Specify only the headers you need to allow
+    // allowMethods: Cors.ALL_METHODS, // Specify only the methods you need to allow
+    // allowHeaders: Cors.DEFAULT_HEADERS, // Specify only the headers you need to allow
   },
 });
 
