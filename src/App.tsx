@@ -9,16 +9,15 @@ import { component, formFields } from './Page/Login';
 export default function App() {
   const [loginAction, set_loginAction] = useState(false)
   const { authStatus } = useAuthenticator(context => [context.authStatus]);
-  console.log(loginAction, authStatus, "loginAction")
+
   return (
     <Fragment>{
       authStatus === 'authenticated' || loginAction
         ? <Authenticator
           // socialProviders={['facebook', 'google']}
           formFields={formFields}
-          components={component}
+          components={component(set_loginAction)}
           loginMechanisms={['email']}
-
         >
           {({ signOut, user }) => {
             if (!user) set_loginAction(false)

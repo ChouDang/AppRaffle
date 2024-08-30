@@ -7,8 +7,7 @@ import Home from '../Page/Home';
 import UserInfo from '../Page/UserInfo';
 
 type PropsCustom = {
-    signOut: ((data?: any) => void) | undefined,
-    user: AuthUser | undefined,
+
 }
 
 export type CustomRouteObject = Omit<RouteObject, "children"> & {
@@ -24,22 +23,45 @@ export type CustomRouteObject = Omit<RouteObject, "children"> & {
     isShowMenu: boolean,
 };
 
-const useRouterHook = (props: PropsCustom) => {
+const useRouterHook = ({
+    signOut
+}: {
+    signOut: ((data?: any) => void) | undefined
+}) => {
 
-    const {
-        signOut,
-        user
-    } = props
 
     const [selectedKeys, set_selectedKeys] = useState<string[]>([])
 
-    useEffect(() => {
-        if (user) {
-            fetchAuthSession().then((info) => {
-                console.log(info, "info")
-            });
-        }
-    }, [user])
+    const customRouterAdmin: CustomRouteObject[] = [
+        {
+            path: "/",
+            Id: 'Root',
+            PageName: "Trang quản lý",
+            permission: { View: true, Edit: true },
+            element: <>Trang quản lý</>,
+            errorElement: <Error />,
+            isShowMenu: false,
+        },
+        {
+            path: "/UserInfo",
+            Id: 'UserInfo',
+            PageName: "Thông tin cá nhân",
+            permission: { View: true, Edit: true },
+            element: <UserInfo />,
+            errorElement: <Error />,
+            isShowMenu: false,
+        },
+        {
+            path: "/logout",
+            Id: 'logout',
+            parentId: "",
+            isShowMenu: false,
+            async action() {
+                signOut && signOut()
+            },
+        },
+    ]
+
 
     const customRouter: CustomRouteObject[] = [
         {
@@ -91,6 +113,16 @@ const useRouterHook = (props: PropsCustom) => {
         }
     })
 
+    const routerAdmin = createBrowserRouter(customRouterAdmin as RouteObject[]);
+    const menuItemsAdmin = customRouterAdmin.filter(i => i.isShowMenu).map((i) => {
+        return {
+            key: i.path,
+            label: `${i.PageName}`,
+            onClick: () => {
+                router.navigate(i.path)
+            }
+        }
+    })
 
     if (import.meta.hot) {
         import.meta.hot.dispose(() => router.dispose());
@@ -98,8 +130,11 @@ const useRouterHook = (props: PropsCustom) => {
 
     return {
         router,
-        customRouter,
         menuItems,
+
+        routerAdmin,
+        menuItemsAdmin,
+
         selectedKeys,
         set_selectedKeys
     }

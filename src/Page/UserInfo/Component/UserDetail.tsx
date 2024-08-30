@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { Button, Col, Descriptions, Input, Modal, Row, notification } from 'antd';
 import { AuthSession, fetchAuthSession, updatePassword } from 'aws-amplify/auth';
 import React, { Fragment, useEffect, useState } from 'react';
@@ -174,14 +175,10 @@ const ModalChangePass = (props: PropsPass) => {
 
 const UserDetail = () => {
 
+    const queryClient = useQueryClient()
     const [open, set_open] = useState(false)
-    const [UserInfo, set_UserInfo] = useState<AuthSession>({})
-    useEffect(() => {
-        fetchAuthSession().then((info) => {
-            console.log(info, "info")
-            set_UserInfo(info)
-        });
-    }, [])
+    const UserInfo = (queryClient.getQueryData(["UserInfo"]) || {}) as AuthSession
+
     return (
         <Fragment>
             <Descriptions title="Thông tin cá nhân" column={2} items={[

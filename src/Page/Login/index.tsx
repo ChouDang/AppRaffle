@@ -1,6 +1,5 @@
-import { Authenticator, Button, CheckboxField, Heading, Image, Placeholder, SelectField, Text, useAuthenticator, useTheme, View } from "@aws-amplify/ui-react";
+import { Authenticator, Button, Heading, Image, SelectField, Text, useAuthenticator, useTheme, View } from "@aws-amplify/ui-react";
 import { I18n } from 'aws-amplify/utils';
-
 I18n.putVocabularies({
     vi: {
         'Account recovery requires verified contact information': 'Khôi phục tài khoản yêu cầu thông tin liên hệ đã được xác minh',
@@ -77,200 +76,212 @@ I18n.putVocabularies({
             'Mã của bạn đang trên đường đến. Để đăng nhập, nhập mã chúng tôi đã gửi cho bạn',
         'Your code is on the way. To log in, enter the code we texted to':
             'Mã của bạn đang trên đường đến. Để đăng nhập, nhập mã chúng tôi đã gửi qua tin nhắn đến',
-        "Your passwords must match": "Mật khẩu không giống"
+        "Your passwords must match": "Mật khẩu không giống",
+        'Username cannot be empty': 'Tên người dùng không được để trống',
+        'Password must be at least 8 characters': 'Mật khẩu phải có ít nhất 8 ký tự',
+        'Incorrect username or password': 'Tên người dùng hoặc mật khẩu không chính xác',
+        'Sign Up': 'Đăng ký',
+        'Reset Password': 'Đặt lại mật khẩu',
+        'Enter your password': 'Nhập mật khẩu của bạn',
+        'Password must have upper case letters': 'Mật khẩu phải có chữ in hoa',
+        'Password must have numbers': 'Mật khẩu phải có số',
+        'username is required to signIn': 'Vui lòng điền thông tin đăng nhập',
+        'password is required to signIn': 'Vui lòng nhập mật khẩu',
+        'Incorrect username or password.': 'Sai thông tin đăng nhập',
+        'Password must have at least 8 characters': 'Mật khẩu tối thiểu 8 ký tự',
+        'Password must have lower case letters': 'Mật khẩu phải có chữ thường',
+        'Password must have special characters': 'Mật khẩu phải có ký tự đặc biệt',
+        'Invalid phone number format.': 'Số điện thoại không hợp lệ',
+        'username is required to resetPassword': 'Email không được để trống',
+        'Your code is on the way. To log in, enter the code we sent you. It may take a minute to arrive.': 'Mã của bạn đang được gửi đến. Để đăng nhập, hãy nhập mã chúng tôi đã gửi cho bạn. Có thể mất một phút để đến nơi.',
+        'code is required to confirmSignUp': 'Vui lòng nhập mã xác nhận',
+        'Attempt limit exceeded, please try after some time.': 'Đã vượt quá giới hạn số lần thử, vui lòng thử lại sau một thời gian.',
     }
 });
 I18n.setLanguage('vi');
 
-export const component = {
-    Header() {
-        const { tokens } = useTheme();
-
-        return (
-            <View textAlign="center" padding={tokens.space.large}>
-                <Image
-                    alt="ChouDang logo"
-                    src={process.env.NODE_ENV == "development"
-                        ? `${window.location.origin}/public/LOGOCHOUDANG.png`
-                        : `${window.location.origin}/LOGOCHOUDANG.png`}
-                    width={200} height={100}
-                />
-            </View>
-        );
-    },
-
-    Footer() {
-        const { tokens } = useTheme();
-
-        return (
-            <View textAlign="center" padding={tokens.space.large}>
-                <Text color={tokens.colors.neutral[80]}>
-                    &copy; All Rights Reserved
-                </Text>
-            </View>
-        );
-    },
-
-    SignIn: {
+export const component = (set_loginAction = (vl: boolean) => { }) => {
+    return {
         Header() {
             return (
-                <Heading
-                    level={3}
-                    style={{ display: 'flex', justifyContent: "center" }}
-                >
-                    Đăng nhập
-                </Heading>
+                <View textAlign="center">
+                    <Image
+                        alt="ChouDang logo"
+                        src={process.env.NODE_ENV == "development"
+                            ? `${window.location.origin}/public/LOGOCHOUDANG.png`
+                            : `${window.location.origin}/LOGOCHOUDANG.png`}
+                        width={200} height={100}
+                    />
+                </View>
             );
         },
-
         Footer() {
-            const { toForgotPassword } = useAuthenticator();
-
+            const { tokens } = useTheme();
             return (
-                <View textAlign="center">
-                    <Button
-                        fontWeight="normal"
-                        onClick={toForgotPassword}
-                        size="small"
-                        variation="link"
+                <View textAlign="center" padding={tokens.space.large}>
+                    <Text color={tokens.colors.neutral[80]}>
+                        &copy; All Rights Reserved
+                    </Text>
+                </View>
+            );
+        },
+        SignIn: {
+            Header() {
+                return (
+                    <Heading
+                        level={3}
+                        style={{ display: 'flex', justifyContent: "center" }}
+                    >
+                        Đăng nhập
+                    </Heading>
+                );
+            },
+            Footer() {
+                const { toForgotPassword } = useAuthenticator();
+                return (
+                    <View textAlign="center" style={{
+                        display: "flex",
+                        justifyContent: "space-around"
+                    }}>
+                        <Button
+                            fontWeight="normal"
+                            onClick={() => set_loginAction(false)}
+                            size="small"
+                            variation="link"
+                        >
+                            Đi đến trang khách
+                        </Button>
+                        <Button
+                            fontWeight="normal"
+                            onClick={toForgotPassword}
+                            size="small"
+                            variation="link"
+                        >
+                            Reset Mật khẩu
+                        </Button>
+                    </View>
+                );
+            },
+        },
+        SignUp: {
+            Header() {
+                return (
+                    <Heading
+                        level={3}
+                        style={{
+                            display: 'flex',
+                            justifyContent: "center"
+                        }}
+                    >
+                        Tạo tài khoản
+                    </Heading>
+                );
+            },
+            Footer() {
+                const { toSignIn } = useAuthenticator();
+                return (
+                    <View textAlign="center">
+                        <Button
+                            fontWeight="normal"
+                            onClick={toSignIn}
+                            size="small"
+                            variation="link"
+                        >
+                            Quay lại Đăng nhập
+                        </Button>
+                    </View>
+                );
+            },
+            FormFields() {
+                return (
+                    <>
+                        <Authenticator.SignUp.FormFields />
+                        <SelectField name="locale" label="Bạn là:">
+                            <option value="User">Người dùng</option>
+                            <option value="StoreOwner">Đại lý</option>
+                        </SelectField>
+                    </>
+                );
+            },
+        },
+        ConfirmSignUp: {
+            Header() {
+                return (
+                    <Heading
+                        level={3}
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center'
+                        }}
+                    >
+                        Xác nhận đăng ký
+                    </Heading>
+                );
+            },
+        },
+        SetupTotp: {
+            Header() {
+                return (
+                    <Heading
+                        level={3}
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center'
+                        }}
+                    >
+                        Nhập thông tin
+                    </Heading>
+                );
+            },
+        },
+        ConfirmSignIn: {
+            Header() {
+                return (
+                    <Heading
+                        level={3}
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center'
+                        }}
+                    >
+                        Nhập thông tin
+                    </Heading>
+                );
+            },
+        },
+        ForgotPassword: {
+            Header() {
+                return (
+                    <Heading
+                        level={3}
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center'
+                        }}
                     >
                         Reset Mật khẩu
-                    </Button>
-                </View>
-            );
+                    </Heading>
+                );
+            },
         },
-
-    },
-
-    SignUp: {
-        Header() {
-            const { tokens } = useTheme();
-
-            return (
-                <Heading
-                    padding={`${tokens.space.xl} 0 0 ${tokens.space.xl}`}
-                    level={3}
-                    style={{
-                        display: 'flex',
-                        justifyContent: "center"
-                    }}
-                >
-                    Tạo tài khoản
-                </Heading>
-            );
-        },
-        Footer() {
-            const { toSignIn } = useAuthenticator();
-
-            return (
-                <View textAlign="center">
-                    <Button
-                        fontWeight="normal"
-                        onClick={toSignIn}
-                        size="small"
-                        variation="link"
+        ConfirmResetPassword: {
+            Header() {
+                return (
+                    <Heading
+                        level={3}
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center'
+                        }}
                     >
-                        Quay lại Đăng nhập
-                    </Button>
-                </View>
-            );
+                        Xác nhận Mật khẩu
+                    </Heading>
+                );
+            },
         },
-        FormFields() {
-            return (
-                <>
-                    <Authenticator.SignUp.FormFields />
-                    <SelectField name="locale" label="Bạn là:">
-                        <option value="User">Người dùng</option>
-                        <option value="StoreOwner">Đại lý</option>
-                    </SelectField>
-                </>
-            );
-        },
-    },
-    ConfirmSignUp: {
-        Header() {
-            return (
-                <Heading
-                    level={3}
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'center'
-                    }}
-                >
-                    Nhập thông tin 111
-                </Heading>
-            );
-        },
+    };
 
-    },
-    SetupTotp: {
-        Header() {
-            const { tokens } = useTheme();
-            return (
-                <Heading
-                    level={3}
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'center'
-                    }}
-                >
-                    Nhập thông tin
-                </Heading>
-            );
-        },
-
-    },
-    ConfirmSignIn: {
-        Header() {
-            return (
-                <Heading
-                    level={3}
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'center'
-                    }}
-                >
-                    Nhập thông tin
-                </Heading>
-            );
-        },
-
-    },
-    ForgotPassword: {
-        Header() {
-            return (
-                <Heading
-                    level={3}
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'center'
-                    }}
-                >
-                    Reset Mật khẩu
-                </Heading>
-            );
-        },
-
-    },
-    ConfirmResetPassword: {
-        Header() {
-            return (
-                <Heading
-                    level={3}
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'center'
-                    }}
-                >
-                    Xác nhận Mật khẩu
-                </Heading>
-            );
-        },
-
-    },
-
-};
-
+}
 export const formFields = {
     signIn: {
         username: {
@@ -315,15 +326,6 @@ export const formFields = {
             dialCodeList: ['+84'],
             dialCode: '+84'
         },
-        // group: {
-        //     isRequired: true,
-        //     label: 'Số điện thoại:',
-        //     placeholder: 'Nhập số điện thoại',
-        //     order: 5,
-        //     dialCodeList: ['+84'],
-        //     dialCode: '+84',
-        //     type: 'autocomplete'
-        // }
     },
     forgotPassword: {
         username: {

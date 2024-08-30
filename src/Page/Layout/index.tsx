@@ -1,30 +1,46 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import useRouterHook from '../../Hooks/useRouterHook';
 import { Button, Dropdown, Layout as LayoutAntd, Menu, theme } from 'antd';
-import { AuthUser } from 'aws-amplify/auth';
+import { AuthUser, fetchAuthSession } from 'aws-amplify/auth';
 import Avatar from '../../Component/Avatar';
 import { RouterProvider } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 const { Header, Content, Footer } = LayoutAntd;
 
 const Layout = ({
-    signOut, user
+    signOut,
+    user
 }: {
     signOut: ((data?: any) => void) | undefined,
     user: AuthUser | undefined
 }) => {
+
     const {
         router,
-        customRouter,
         menuItems,
+
+        routerAdmin,
+
         selectedKeys,
         set_selectedKeys
     } = useRouterHook({
-        signOut,
-        user
+        signOut
     })
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
+
+    const { data: UserInfo } = useQuery({
+        queryKey: ["UserInfo"],
+        queryFn: () => fetchAuthSession(),
+        enabled: !!user,
+        staleTime: 1000 * 60 * 60
+    })
+
+    if (UserInfo && UserInfo?.tokens?.accessToken?.payload?.["cognito:groups"][0] === 'Admin') {
+        return <RouterProvider router={routerAdmin} fallbackElement={<p>Initial Load...</p>} />
+    }
+
     return (
         <Fragment>
             <LayoutAntd>
