@@ -1,9 +1,9 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import AWS from 'aws-sdk';
 // const cognito = new AWS.CognitoIdentityServiceProvider();
-
-exports.handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     console.log(process.env, "check env")
+    console.log(event, "check event")
     // Lấy thông tin người dùng từ sự kiện Cognito
     const userGroups = event?.requestContext?.authorizer?.claims['cognito:groups'] ?? false
 
