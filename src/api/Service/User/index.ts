@@ -1,20 +1,20 @@
+import { Amplify } from "aws-amplify";
 import { fetchAuthSession } from "aws-amplify/auth";
-// https://9yc8g6nh89.execute-api.ap-southeast-1.amazonaws.com/dev/getUserPoolFunction
-//`${process.env.GATEWAY_API_BASE_URL}/${endPoint}`
-const endPoint = 'dev/getUserPoolFunction';
+
+const endPoint = 'getUserPoolFunction';
 export const fetchUsers = async () => {
     try {
-        let info = await fetchAuthSession()
-        const response = await fetch(`${process.env.GATEWAY_API_BASE_URL}/${endPoint}`, {
+        let config = Amplify.getConfig();
+        let session = await fetchAuthSession()
+        const idToken = session?.tokens?.idToken?.toString();
+        const response = await fetch(`${config.API.REST.myRestApi.endpoint}${endPoint}?userPoolId=${config.Auth.Cognito.userPoolId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${info?.tokens?.accessToken.toString()}`,
+                'Authorization': `Bearer ${idToken}`,
             },
         });
-        console.log("pass", response, response.ok)
         if (!response.ok) {
-            console.log("check")
             throw new Error('Failed to fetch users');
         }
         const users = await response.json();

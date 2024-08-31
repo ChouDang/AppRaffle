@@ -1,12 +1,13 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import AWS from 'aws-sdk';
-// const cognito = new AWS.CognitoIdentityServiceProvider();
+const cognito = new AWS.CognitoIdentityServiceProvider();
+
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     console.log(process.env, "check env")
     console.log(event, "check event")
     // Lấy thông tin người dùng từ sự kiện Cognito
     const userGroups = event?.requestContext?.authorizer?.claims['cognito:groups'] ?? false
-
+    const userPoolId = event?.queryStringParameters?.userPoolId || ""
     // Kiểm tra nếu người dùng không thuộc nhóm Admin
     if (!userGroups || !userGroups?.includes('Admin')) {
         return {
@@ -16,17 +17,18 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     }
     try {
         const params = {
-            UserPoolId: 'YOUR_USER_POOL_ID', // Thay bằng ID của User Pool
+            UserPoolId: userPoolId,
         };
-        console.log(params, "params")
         // Lấy danh sách người dùng từ Cognito User Pool
-        // const data = await cognito.listUsers(params).promise();
+        const data = await cognito.listUsers(params).promise();
+        console.log(data, "resp data")
         return {
             statusCode: 200,
-            body: "test resp",
+            body: JSON.stringify(data),
             headers: {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
+                "Access-Control-Allow-Origin": "*", // Restrict this to domains you trust
+                "Access-Control-Allow-Headers": "*", // Specify only the headers you need to allow
             },
         };
     } catch (error) {
@@ -36,7 +38,8 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             body: JSON.stringify({ message: 'Error fetching users' }),
             headers: {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
+                "Access-Control-Allow-Origin": "*", // Restrict this to domains you trust
+                "Access-Control-Allow-Headers": "*", // Specify only the headers you need to allow
             },
         };
     }
