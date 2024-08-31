@@ -1,5 +1,5 @@
 import { defineBackend } from "@aws-amplify/backend";
-import { Stack } from "aws-cdk-lib";
+import { aws_iam, Stack } from "aws-cdk-lib";
 import {
   AuthorizationType,
   CognitoUserPoolsAuthorizer,
@@ -74,6 +74,7 @@ getUserPoolPath.addMethod("GET", lambdaIntegrationGetUserPool, {
   authorizer: cognitoAuth,
 });
 
+
 // create a new IAM policy to allow Invoke access to the API
 const apiRestPolicy = new Policy(apiStack, "RestApiPolicy", {
   statements: [
@@ -86,6 +87,14 @@ const apiRestPolicy = new Policy(apiStack, "RestApiPolicy", {
     }),
   ],
 });
+
+// Define IAM Policy Statement
+const lambdaPolicy = new aws_iam.PolicyStatement({
+  sid: 'AllowCognitoListUsers',
+  actions: ['cognito-idp:ListUsers'],
+  resources: ['*'],
+});
+backend.getUserPool.resources.lambda.addToRolePolicy(lambdaPolicy)
 
 // attach the policy to the authenticated and unauthenticated IAM roles
 backend.auth.resources.authenticatedUserIamRole.attachInlinePolicy(
