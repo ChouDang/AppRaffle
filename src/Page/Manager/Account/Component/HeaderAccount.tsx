@@ -2,15 +2,27 @@ import React from 'react'
 import { Button, Row, Space } from 'antd'
 
 const HeaderAccount = ({
+    select,
     onOpenModalUpsert = () => { }
 }: {
+    select: string[]
     onOpenModalUpsert: (row: any) => void
 }) => {
     return (
-        <Row>
+        <Row className='mb-3'>
             <Space>
-                <Button onClick={() => onOpenModalUpsert(null)} >Thêm mới</Button>
-                <Button onClick={() => console.log("click xóa")} >Xóa</Button>
+                <Button
+                    type='primary'
+                    onClick={() => onOpenModalUpsert(null)} >
+                    Thêm mới
+                </Button>
+                <Button
+                    danger
+                    type='primary'
+                    disabled={select.length === 0}
+                    onClick={() => console.log("click xóa")} >
+                    Xóa
+                </Button>
             </Space>
         </Row>
     )

@@ -1,6 +1,5 @@
 import { Amplify } from "aws-amplify";
 import { fetchAuthSession } from "aws-amplify/auth";
-
 const endPoint = 'getUserPoolFunction';
 export const fetchUsers = async () => {
     try {
@@ -17,8 +16,8 @@ export const fetchUsers = async () => {
         if (!response.ok) {
             throw new Error('Failed to fetch users');
         }
-        const users = await response.json();
-        console.log('Users:', users);
+        return await response.json();
+
     } catch (error) {
         console.error('Error fetching users:', error);
     }
